@@ -13,3 +13,9 @@ How to run:
 1. Connect JIG from your laptop to the TV
 2. Open CMD/Terminal
 3. run: python Control_TV.py
+
+Supported TVs:
+1. Bluefin
+2. Chutoro
+3. Vulcan
+4. Amaebi
