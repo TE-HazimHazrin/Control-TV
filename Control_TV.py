@@ -15,6 +15,7 @@ ComPort = ''
 project = 55
 uirt_connection = False
 uirt_usage = False
+error_flag = 0
 
 ### DEFINES ###
 keydown = 20
@@ -123,6 +124,7 @@ def check_usbuirt_connection():
         return False
 
 def send_command(my_com = ""):
+    global error_flag
     while True:
         try:
             ser.reset_input_buffer()
@@ -133,6 +135,7 @@ def send_command(my_com = ""):
         except:
             print("Something went wrong, please reconnect COM Port")
             connect_com_port()
+            error_flag = 1
             reset_ui()
             return
         
@@ -564,6 +567,7 @@ def aging():
 
 
 def custom_keyevent():
+    global error_flag
     print_out_keyevents()
     print("\n\nInput your custom keyevent:\n")
     choice = input("Longpress ? (y/n): ")
@@ -583,6 +587,8 @@ def custom_keyevent():
             for i in range(new_repetition):
                 navigate_func(new_key)
                 time.sleep(new_delay)
+                if error_flag == 1:
+                    break
 
             if new_delay == 0:
                 time.sleep(DEFAULT_TIME_PER_COMMAND * new_repetition)
@@ -594,8 +600,11 @@ def custom_keyevent():
     else:
         print("\nInvalid input")
 
-    press_any_key()
-    reset_ui()
+    if error_flag == 0:
+        press_any_key()
+        reset_ui()
+    else:
+        error_flag = 0
 
 def keyboard():
 
@@ -863,7 +872,7 @@ def switch_case(string = '234', get_string = True):
 
     elif string == '4': # Custom Keyevent
         if ui_flag == 1:
-            reset_ui_advance()
+            clear_screen()
             custom_keyevent()
 
     elif string == '5': # Reboot TV
@@ -956,6 +965,7 @@ def main():
     while string != '9':
         string = switch_case()
 
+    send_command("exit")
     print("\n\nProcess ended")
     press_any_key()
     clear_screen()
