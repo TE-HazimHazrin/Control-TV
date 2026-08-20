@@ -531,13 +531,11 @@ def save_user_control_to_file(mylist):
     create_folder("scripts")
 
     file_path = os.path.join("scripts", filename)
-    
-    f = open(file_path, "w")
 
-    for i in (mylist):
-        f.write(i)
+    with open(file_path, "w", encoding="utf-8") as f:
+        for i in mylist:
+            f.write(i)
 
-    f.close
     print("\nFile created at:", os.path.abspath(file_path))
     #print('\nText file: "{}" has been created'.format(filename))
 
